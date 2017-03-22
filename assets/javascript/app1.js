@@ -4,19 +4,19 @@
 var questions = [
 	//Question 1, index 0
 	{
-		question: "What is 2+2",
-		answer: 4,
+		question: "What is 7x9?",
+		answer: 63,
 		choices: [
-			4, 5, 9, 18
+			45, 63, 72, 81
 		]
 
 	},
 	//Question 2, index 1
 	{
-		question: "What is the capital of the United States?",
-		answer: "Washington D.C.",
+		question: "What is the capital of California?",
+		answer: "Sacramento",
 		choices: [
-			"New York City", "Seattle", "Washington D.C.", "Charlotte"
+			"San Diego", "San Francisco", "Sacramento", "Los Angeles"
 		]
 	},
 	//Question 3, index 2
@@ -90,7 +90,7 @@ var questions = [
 
 //this is the time from which the timer starts counting backwards. currently set to 5 for testing
 //purposes
-var counter = 30;
+var counter = 15;
 
 
 var correctTally = 0;

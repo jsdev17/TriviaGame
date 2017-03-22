@@ -1,7 +1,7 @@
 var questions = [
 	//Question 1, index 0
 	{
-		question: "What is 2+2",
+		question: "What is 2+2?",
 		answer: 4,
 		choices: [
 			4, 5, 9, 18

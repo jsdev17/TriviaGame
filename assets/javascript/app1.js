@@ -90,7 +90,7 @@ var questions = [
 
 //this is the time from which the timer starts counting backwards. currently set to 5 for testing
 //purposes
-var counter = 5;
+var counter = 30;
 
 
 var correctTally = 0;
@@ -105,6 +105,8 @@ var questionCounter = 0;
 
 // When the start button is clicked, the HTML content of the welcome screen will change 
 function generateHTML(array){
+
+	$('#timer').css('display', '');
 
 	var htmlString = "";
 
@@ -129,9 +131,9 @@ function generateHTML(array){
 	$('#content').html(htmlString);
 
 
-})
-
 };
+
+
 
 //starts the timer when called
 function timer(){
@@ -141,7 +143,7 @@ function timer(){
 	function thirtySeconds(){
 		if(counter === 0){
 			clearInterval(clock);
-			// generate a loss due to timeout
+			generateLossDueToTimeout();
 		}
 		else if(counter > 0){
 			counter--;
@@ -150,12 +152,66 @@ function timer(){
 	}
 }
 
-function checkForWin(){
-	//nothing here yet
+function generateWin(){
+	correctTally++;
+	
+	notification = "<p> Correct! The answer is " + questions[questionCounter].answer + "</p>";
+	$('#content').html(notification);
+	setTimeout(transition, 3000);
+
 }
 
-function checkForLose(){
-	//nothing here yet
+function generateLose(){
+	incorrectTally++;
+
+	notification = "<p> Wrong! The correct answer is " + questions[questionCounter].answer + "</p>";
+	$('#content').html(notification);
+	setTimeout(transition, 3000);
+}
+
+function generateLossDueToTimeout(){
+	unanswenredTally++;
+
+	notification = "<p> You ran out of time! The correct answer is " + questions[questionCounter].answer + "</p>";
+	$('#content').html(notification);
+	setTimeout(transition, 3000);
+}
+
+
+function transition() {
+	// if the questionCounter hits 9, the game ends.
+	if (questionCounter < 9) {
+
+		questionCounter++;
+		generateHTML(questions);
+		counter = 30;
+		timer();
+	}
+	else {
+		finalScreen();
+	}
+}
+
+function finalScreen(){
+	$('#timer').css('display', 'none');
+
+	finalText = "<p> The game's finished! Here are the results </p>" + "<br />" +
+				"<p> Correct answers: " + correctTally + "</p>" +
+				"<p> Incorrect answers: " + incorrectTally + "</p>" +
+				"<p> Unanswered questions: " + unanswenredTally + "</p>" + "<br />" +
+				"<button id='reset-button'><span>Start Over</span></button>"
+
+	$('#content').html(finalText);
+}
+
+function resetGame() {
+	questionCounter = 0;
+	correctTally = 0;
+	incorrectTally = 0;
+	unansweredTally = 0;
+	counter = 30;
+	generateHTML(questions);
+	timer();
 }
 
 //jQuery code
@@ -174,11 +230,41 @@ $(document).ready(function(){
 
 	});
 
-	$('.answer').on("click", function(){
+	// $('.answer').on("click", function(){
+	// 	//stores user choice
+	// 	var selectedAnswer = $('.answer').text();
+	// 	console.log(selectedAnswer);
+
+	// })
+
+	$(document).on("click", '.answer', function(){
+		// console.log($(this));
 		//stores user choice
-		var selectedAnswer = $('.answer').text();
+		var selectedAnswer = $(this).text();
 		console.log(selectedAnswer);
+		console.log(questions[questionCounter].answer);
+
+		//using ==== didn't work here... using == did. why? because selected answer
+		//is a string. the value in questions[questionCounter].answer is an integer...
+		if(selectedAnswer == questions[questionCounter].answer){
+			clearInterval(clock);
+			generateWin();
+			console.log("correct");
+		}
+		else{
+			clearInterval(clock);
+			generateLose();
+			console.log("incorrect");
+		}
 
 	})
 
-})
+
+	$(document).on("click", "#reset-button", function(){
+
+		resetGame();
+			
+	})
+
+})//end of document.ready function
+
